@@ -1,43 +1,46 @@
-import random 
+import random
+import os
 
-WIDTH:int=4
-HEIGHT:int=4
+SIZE:int=4
+grid:list=[]
+emptySlots:list=[]
 
-def generateGrid()->list:
-    grid:list=[]
-    emptySlots:list=[]
-    
-    for i in range(WIDTH):
-        grid.append([])
+def generateGrid()->None:
+    for i in range(SIZE):
         grid.append([])
         
-        for j in range(HEIGHT):
+        for j in range(SIZE):
             grid[i].append("")
-            grid[i].append((i,j))
+
+def checkEmptySlots()->None:
+    for i in range(SIZE):
+        for j in range(SIZE):
+            if grid[i][j]=="":
+                emptySlots.append((i,j))
             
-    return grid, emptySlots
+def getRandomPos()->int:
+    return random.randint(0,len(emptySlots))
 
-def popSlot(emptySlots,index):
-    emptySlots[index]=emptySlots[-1]
-    emptySlots.pop()
-    return emptySlots
+def randomGen():
+
+    checkEmptySlots()
+    randomPos:int = getRandomPos()
     
-def getRandomPos(emptySlots)->int:
-    return random.randint(len(emptySlots))
+    if random.randint(1,10)<9:
+        grid[emptySlots[randomPos][0]][emptySlots[randomPos][1]]=2
+    else:
+        grid[emptySlots[randomPos][0]][emptySlots[randomPos][1]]=4
 
-def randomGen(grid,emptySlots):
+def init():
+    generateGrid()
     
     for i in range(2):
+        randomGen()
     
-        randomPos:int = getRandomPos()
-        popSlot(getRandomPos)
+def jeu():
+    
+    init()
+    while True:
         
-        if random.randint(1,10)<9:
-            grid[emptySlots[randomPos[0]]][emptySlots[randomPos[1]]]=2
-        else:
-            grid[emptySlots[randomPos[0]]][emptySlots[randomPos[1]]]=4
 
-def jouer():
-    
-    grid,emptySlots = generateGrid()
-        
+jeu()
