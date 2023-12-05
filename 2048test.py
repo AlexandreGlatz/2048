@@ -2,51 +2,43 @@ import random
 import os
 from Tools import *
 
-SIZE:int=4
-emptySlots:list=[]
+SIZE: int = 4
 
-#génére grille de jeu
-def generateGrid()->list:
-    grid:list=[]
-    '''génère la grille ->None'''
+
+def generateGrid() -> list:
+    grid: list = []
     for i in range(SIZE):
         grid.append([])
-        
         for j in range(SIZE):
             grid[i].append("□")
-
     return grid
 
 
-def checkEmptySlots(grid:list)->None:
-    emptySlots.clear()
+def checkEmptySlots(grid: list) -> None:
+    emptySlots: list = []
     for i in range(SIZE):
         for j in range(SIZE):
-            if grid[i][j]=="□":
-                emptySlots.append((i,j))
+            if grid[i][j] == "□":
+                emptySlots.append((i, j))
+    return emptySlots
 
-def getRandomPos()->int:
-    '''permet d'avoir une position random ->int '''
-    return random.randint(0,len(emptySlots)-1)
 
-def randomGen(grid:list)->None:
-    '''#générer les 2 et les 4'''
-    randomPos:int = getRandomPos()
-    
-    if random.randint(1,10)<9:
-        grid[emptySlots[randomPos][0]][emptySlots[randomPos][1]]="2"
+def getRandomPos(emptySlots:list) -> int:
+    return random.randint(0, len(emptySlots) - 1)
+
+
+def randomGen(grid: list, emptySlots:list) -> None:
+    checkEmptySlots(grid)
+    randomPos: int = getRandomPos(emptySlots)
+    if random.randint(1, 10) < 9:
+        grid[emptySlots[randomPos][0]][emptySlots[randomPos][1]] = "2"
     else:
-        grid[emptySlots[randomPos][0]][emptySlots[randomPos][1]]="4"
+        grid[emptySlots[randomPos][0]][emptySlots[randomPos][1]] = "4"
 
 
-def init()->list:
-    '''#permet d'init le jeu'''
-    grid = generateGrid()
-    
+def init(grid:list,emptySlots:list) -> None:
     for i in range(2):
-        randomGen(grid)
-    
-    return grid
+        randomGen(grid, emptySlots)
 
 def compress(grid:list):
 
@@ -160,6 +152,7 @@ def move_down(grid:list):
 
 
 def move(grid)->list:
+    
     playerInput = AskInputs("Quel mouvement voulez-vous faire ? (z,q,s,d): ", ["z","q","s","d"])
     
     if playerInput =="q":
@@ -211,24 +204,44 @@ def gameStateWin(grid: list) -> str:
 
 
 def jeu():
-    while True:
-        grid = init()
-
+    
+        grid = generateGrid()
+        emptySlots=checkEmptySlots(grid)
+        init(grid,emptySlots) 
+        
+        
         printGrid(grid)
 
         while True:
+            emptySlots=checkEmptySlots(grid)
             grid = move(grid)
+            
             state = gameStateWin(grid)
             
             if gameStateWin(grid) == 'Continuez à jouer !':
                 
-                if len(emptySlots) - 1 > 0:
-                    randomGen(grid)
+                if len(emptySlots) > 0:
+                    randomGen(grid,emptySlots)
 
             if gameStateWin(grid) == 'Perdu D:':
+                printGrid(grid)
                 print("Vous avez perdu !")
                 if not Retry():
                     return
+                else:
+                    grid = generateGrid()
+                    emptySlots=checkEmptySlots(grid)
+                    init(grid,emptySlots) 
+            
+            if gameStateWin(grid) == 'Gagné !':
+                printGrid(grid)
+                print("Vous avez Gagné !! gg")
+                if not Retry():
+                    return
+                else:
+                    grid = generateGrid()
+                    emptySlots=checkEmptySlots(grid)
+                    init(grid,emptySlots) 
 
             printGrid(grid)
             print(state)
