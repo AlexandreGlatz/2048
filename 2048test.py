@@ -1,7 +1,7 @@
 import random
 import os
 from Tools import *
-import keyboard
+from pynput.keyboard import Key, Listener
 
 SIZE: int = 4
 
