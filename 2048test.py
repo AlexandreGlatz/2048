@@ -6,7 +6,6 @@ import keyboard
 SIZE: int = 4
 
 
-
 def generateGrid() -> list:
     grid: list = []
     for i in range(SIZE):
@@ -96,88 +95,38 @@ def transpose(grid:list):
             
     return new_grid
     
-def move_left(grid:list):
-	new_grid, changed1 = compress(grid)
 
-	new_grid, changed2 = merge(new_grid)
-	
-	changed = changed1 or changed2
+def move_left_func(grid:list):
+    new_grid, changed1 = compress(grid)
+    new_grid, changed2 = merge(new_grid)
+    changed = changed1 or changed2
+    new_grid, temp = compress(new_grid)
+    return new_grid, changed
 
-	new_grid, temp = compress(new_grid)
+def move_right_func(grid:list):
+    new_grid = reverse(grid)
+    new_grid, changed = move_left_func(new_grid)
+    new_grid = reverse(new_grid)
+    return new_grid, changed
 
-	return new_grid, changed
+def move_up_func(grid:list):
+    new_grid = transpose(grid)
+    new_grid, changed = move_left_func(new_grid)
+    new_grid = transpose(new_grid)
+    return new_grid, changed
 
+def move_down_func(grid:list):
+    new_grid = transpose(grid)
+    new_grid, changed = move_right_func(new_grid)
+    new_grid = transpose(new_grid)
+    return new_grid, changed
 
-
-def move_right(grid:list):
-
- 
-	new_grid = reverse(grid)
-
-
-	new_grid, changed = move_left(new_grid)
-
-
-	new_grid = reverse(new_grid)
-
-
-	return new_grid, changed
-
+def printGrid(grid:list):
     
-def move_up(grid:list):
-
-
-	new_grid = transpose(grid)
-
-
-	new_grid, changed = move_left(new_grid)
-
-
-	new_grid = transpose(new_grid)
-	return new_grid, changed
-
-
-def move_down(grid:list):
-
-	new_grid = transpose(grid)
-
-	new_grid, changed = move_right(new_grid)
-
-
-	new_grid = transpose(new_grid)
-	return new_grid, changed
-
-
-def move(grid)->list:
+    os.system('cls')
     
-    playerInput = AskInputs("Quel mouvement voulez-vous faire ? (z,q,s,d): ", ["z","q","s","d"])
-    
-    if playerInput =="q":
-
-        grid, _ = move_left(grid)
-        
-    elif playerInput =="d":
-
-        grid, _ =move_right(grid)
-        
-    elif playerInput =="z":   
-        
-        grid, _ =move_up(grid)
-    
-    elif playerInput =="s":
-
-        grid, _ =move_down(grid)
-
-    return grid
-        
-
-def printGrid(grid:list,spaceGrid:list):
-    
-    #os.system('cls')
-    
-    for i in range(len(grid)):
-        print(space
-              Grid[i].join(grid[i]))
+    for i in grid:
+        print(" ".join(i))
 
 def gameStateWin(grid: list) -> str:
     
@@ -200,21 +149,7 @@ def gameStateWin(grid: list) -> str:
 
     return 'Perdu D:'
 
-def alignGrid(grid: list) -> list:
-    biggestLength = 0
-    spaceGrid=[]
-    for i in range(len(grid)):
-        for j in grid[i]:
-            if len(j)>biggestLength:
-                biggestLength = len(j)
-    
-    for h in range(len(grid)):
-        for k in range(len(grid[h])):
-            spaceGrid.append((biggestLength-len(grid[h][k]))*"a")
 
-    
-    print(spaceGrid)
-    return spaceGrid
 
 
 
@@ -225,14 +160,23 @@ def jeu()->None:
         
         init(grid,emptySlots) 
         
-        spaceGrid = alignGrid(grid)
-        printGrid(grid,spaceGrid)
+        printGrid(grid)
 
         while True:
+            key = keyboard.read_hotkey(suppress=True)
+        
+            if key == 'q':
+                grid, changed = move_left_func(grid)
+            elif key == 'd':
+                grid, changed = move_right_func(grid)
+            elif key == 'z':
+                grid, changed = move_up_func(grid)
+            elif key == 's':
+                grid, changed = move_down_func(grid)
+            else:
+                continue
+           
             emptySlots=checkEmptySlots(grid)
-            grid = move(grid)
-            emptySlots=checkEmptySlots(grid)
-            spaceGrid = alignGrid(grid)
             state = gameStateWin(grid)
             
             if gameStateWin(grid) == 'Continuez à jouer !':
@@ -241,7 +185,7 @@ def jeu()->None:
                     randomGen(grid,emptySlots)
 
             if gameStateWin(grid) == 'Perdu D:':
-                printGrid(grid,spaceGrid)
+                printGrid(grid)
                 print("Vous avez perdu !")
                 if not Retry():
                     return
@@ -251,7 +195,7 @@ def jeu()->None:
                     init(grid,emptySlots) 
             
             if gameStateWin(grid) == 'Gagné !':
-                printGrid(grid,spaceGrid)
+                printGrid(grid)
                 print("Vous avez Gagné !! gg")
                 if not Retry():
                     return
@@ -260,7 +204,7 @@ def jeu()->None:
                     emptySlots=checkEmptySlots(grid)
                     init(grid,emptySlots) 
 
-            printGrid(grid,spaceGrid)
+            printGrid(grid)
             print(state)
 
             
