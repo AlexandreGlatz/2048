@@ -1,7 +1,6 @@
 import random
 import os
 from Tools import *
-import keyboard
 
 SIZE: int = 4
 
@@ -176,8 +175,10 @@ def printGrid(grid:list,spaceGrid:list):
     #os.system('cls')
     
     for i in range(len(grid)):
-        print(space
-              Grid[i].join(grid[i]))
+        for j in range(len(grid[i])):
+            print(grid[i][j]+spaceGrid[i][j], end="")
+        print("\n")
+
 
 def gameStateWin(grid: list) -> str:
     
@@ -209,13 +210,41 @@ def alignGrid(grid: list) -> list:
                 biggestLength = len(j)
     
     for h in range(len(grid)):
+        spaceGrid.append([])
         for k in range(len(grid[h])):
-            spaceGrid.append((biggestLength-len(grid[h][k]))*"a")
+            spaceGrid[h].append(" "+(biggestLength-len(grid[h][k]))*" ")
 
-    
-    print(spaceGrid)
     return spaceGrid
 
+
+def is_same_grid(grid1, grid2) -> bool:
+    pass
+
+def Test():
+    #tester déplacement vers la gauche
+    grid = \
+        [
+            ["□", "□", "□", "2" ],
+            ["□", "□", "□", "2" ],
+            ["□", "□", "□", "2" ],
+            ["□", "□", "□", "2" ],
+        ]
+    
+    expected_result = \
+        [
+            ["2", "□", "□", "□" ],
+            ["2", "□", "□", "□" ],
+            ["2", "□", "□", "□" ],
+            ["2", "□", "□", "□" ],
+        ]
+        
+    grid,flag = move_left(grid)
+    
+    if is_same_grid(grid, expected_result):
+        print("TEST SUCCESS")
+    else:
+        print("TEST FAILURE")
+    
 
 
 def jeu()->None:
