@@ -1,6 +1,7 @@
 import random
 import os
 from Tools import *
+import keyboard
 
 SIZE: int = 4
 
@@ -145,34 +146,11 @@ def move_down(grid:list):
 
 	new_grid = transpose(new_grid)
 	return new_grid, changed
-
-
-def move(grid)->list:
-    
-    playerInput = AskInputs("Quel mouvement voulez-vous faire ? (z,q,s,d): ", ["z","q","s","d"])
-    
-    if playerInput =="q":
-
-        grid, _ = move_left(grid)
-        
-    elif playerInput =="d":
-
-        grid, _ =move_right(grid)
-        
-    elif playerInput =="z":   
-        
-        grid, _ =move_up(grid)
-    
-    elif playerInput =="s":
-
-        grid, _ =move_down(grid)
-
-    return grid
         
 
 def printGrid(grid:list,spaceGrid:list):
     
-    #os.system('cls')
+    os.system('cls')
     
     for i in range(len(grid)):
         for j in range(len(grid[i])):
@@ -218,38 +196,104 @@ def alignGrid(grid: list) -> list:
 
 
 def is_same_grid(grid1, grid2) -> bool:
-    pass
+    
+    if len(grid1)== len(grid2):
+        
+        lenGrid:int = len(grid1)
+        
+        for i in range(lenGrid):
+            
+            for j in range(len(grid1[i])):
+                
+                if grid1[i][j] != grid2[i][j]:
+                    return False
+                
+        return True
+    
+    else:
+        return False
+            
 
-def Test():
-    #tester déplacement vers la gauche
+def test():
+    
+    #test move right   
     grid = \
         [
-            ["□", "□", "□", "2" ],
-            ["□", "□", "□", "2" ],
-            ["□", "□", "□", "2" ],
-            ["□", "□", "□", "2" ],
+            ["2", "□", "□", "□" ],
+            ["2", "□", "□", "□" ],
+            ["2", "□", "□", "□" ],
+            ["2", "□", "□", "□" ],
         ]
     
     expected_result = \
         [
-            ["2", "□", "□", "□" ],
-            ["2", "□", "□", "□" ],
-            ["2", "□", "□", "□" ],
-            ["2", "□", "□", "□" ],
+            ["□", "□", "□", "2" ],
+            ["□", "□", "□", "2" ],
+            ["□", "□", "□", "2" ],
+            ["□", "□", "□", "2" ],
         ]
         
-    grid,flag = move_left(grid)
+    grid,flag = move_right(grid)
     
     if is_same_grid(grid, expected_result):
-        print("TEST SUCCESS")
+        print("MOVE RIGHT SUCCESS")
     else:
-        print("TEST FAILURE")
+        print("MOVE RIGHT FAILURE")
     
+    
+    #test move up   
+    grid = \
+        [
+            ["□", "□", "□", "□" ],
+            ["□", "□", "□", "□" ],
+            ["□", "□", "□", "□" ],
+            ["2", "2", "2", "2" ],
+        ]
+    
+    expected_result = \
+        [
+            ["2", "2", "2", "2" ],
+            ["□", "□", "□", "□" ],
+            ["□", "□", "□", "□" ],
+            ["□", "□", "□", "□" ],
+        ]
+        
+    grid,flag = move_up(grid)
+    
+    if is_same_grid(grid, expected_result):
+        print("MOVE UP SUCCESS")
+    else:
+        print("MOVE UP FAILURE")
+    
+     #test fusion   
+    grid = \
+        [
+            ["□", "□", "□", "□" ],
+            ["2", "□", "□", "□" ],
+            ["2", "4", "4", "2" ],
+            ["2", "2", "4", "2" ],
+        ]
+    
+    expected_result = \
+        [
+            ["□", "□", "□", "□" ],
+            ["□", "□", "□", "□" ],
+            ["2", "4", "□", "□" ],
+            ["4", "2", "8", "4" ],
+        ]
+        
+    grid,flag = move_down(grid)
+    
+    if is_same_grid(grid, expected_result):
+        print("FUSION SUCCESS")
+    else:
+        print("FUSION FAILURE")
+
 
 
 def jeu()->None:
-    
-        grid = generateGrid()
+        global grid
+        grid=generateGrid()
         emptySlots=checkEmptySlots(grid)
         
         init(grid,emptySlots) 
@@ -258,8 +302,18 @@ def jeu()->None:
         printGrid(grid,spaceGrid)
 
         while True:
-            emptySlots=checkEmptySlots(grid)
-            grid = move(grid)
+            key = keyboard.read_event(suppress=True)
+
+            if key.event_type == keyboard.KEY_DOWN:
+                if key.name == 'q':
+                    grid, _ = move_left(grid)
+                elif key.name == 'd':
+                    grid, _ = move_right(grid)
+                elif key.name == 'z':
+                    grid, _ = move_up(grid)
+                elif key.name == 's':
+                    grid, _ = move_down(grid)
+            
             emptySlots=checkEmptySlots(grid)
             spaceGrid = alignGrid(grid)
             state = gameStateWin(grid)
@@ -297,4 +351,4 @@ def jeu()->None:
         
         
 
-jeu()
+test()
