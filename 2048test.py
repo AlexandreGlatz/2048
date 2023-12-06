@@ -1,8 +1,10 @@
 import random
 import os
 from Tools import *
+import keyboard
 
 SIZE: int = 4
+
 
 
 def generateGrid() -> list:
@@ -93,22 +95,15 @@ def transpose(grid:list):
             new_grid[i].append(grid[j][i])
             
     return new_grid
-
- 
     
 def move_left(grid:list):
-
-
 	new_grid, changed1 = compress(grid)
-
 
 	new_grid, changed2 = merge(new_grid)
 	
 	changed = changed1 or changed2
 
-	
 	new_grid, temp = compress(new_grid)
-
 
 	return new_grid, changed
 
@@ -124,6 +119,8 @@ def move_right(grid:list):
 
 
 	new_grid = reverse(new_grid)
+
+
 	return new_grid, changed
 
     
@@ -174,12 +171,13 @@ def move(grid)->list:
     return grid
         
 
-def printGrid(grid:list):
+def printGrid(grid:list,spaceGrid:list):
     
-    os.system('cls')
+    #os.system('cls')
     
-    for i in grid:
-        print(" ".join(i))
+    for i in range(len(grid)):
+        print(space
+              Grid[i].join(grid[i]))
 
 def gameStateWin(grid: list) -> str:
     
@@ -202,20 +200,39 @@ def gameStateWin(grid: list) -> str:
 
     return 'Perdu D:'
 
+def alignGrid(grid: list) -> list:
+    biggestLength = 0
+    spaceGrid=[]
+    for i in range(len(grid)):
+        for j in grid[i]:
+            if len(j)>biggestLength:
+                biggestLength = len(j)
+    
+    for h in range(len(grid)):
+        for k in range(len(grid[h])):
+            spaceGrid.append((biggestLength-len(grid[h][k]))*"a")
 
-def jeu():
+    
+    print(spaceGrid)
+    return spaceGrid
+
+
+
+def jeu()->None:
     
         grid = generateGrid()
         emptySlots=checkEmptySlots(grid)
+        
         init(grid,emptySlots) 
         
-        
-        printGrid(grid)
+        spaceGrid = alignGrid(grid)
+        printGrid(grid,spaceGrid)
 
         while True:
             emptySlots=checkEmptySlots(grid)
             grid = move(grid)
-            
+            emptySlots=checkEmptySlots(grid)
+            spaceGrid = alignGrid(grid)
             state = gameStateWin(grid)
             
             if gameStateWin(grid) == 'Continuez à jouer !':
@@ -224,7 +241,7 @@ def jeu():
                     randomGen(grid,emptySlots)
 
             if gameStateWin(grid) == 'Perdu D:':
-                printGrid(grid)
+                printGrid(grid,spaceGrid)
                 print("Vous avez perdu !")
                 if not Retry():
                     return
@@ -234,7 +251,7 @@ def jeu():
                     init(grid,emptySlots) 
             
             if gameStateWin(grid) == 'Gagné !':
-                printGrid(grid)
+                printGrid(grid,spaceGrid)
                 print("Vous avez Gagné !! gg")
                 if not Retry():
                     return
@@ -243,7 +260,7 @@ def jeu():
                     emptySlots=checkEmptySlots(grid)
                     init(grid,emptySlots) 
 
-            printGrid(grid)
+            printGrid(grid,spaceGrid)
             print(state)
 
             

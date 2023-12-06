@@ -2,22 +2,21 @@ import random
 import os
 from Tools import *
 
-SIZE: int = 4
-
+size: int = 4
 
 def generateGrid() -> list:
     grid: list = []
-    for i in range(SIZE):
+    for i in range(size):
         grid.append([])
-        for j in range(SIZE):
+        for j in range(size):
             grid[i].append("□")
     return grid
 
 
 def checkEmptySlots(grid: list) -> None:
     emptySlots: list = []
-    for i in range(SIZE):
-        for j in range(SIZE):
+    for i in range(size):
+        for j in range(size):
             if grid[i][j] == "□":
                 emptySlots.append((i, j))
     return emptySlots
@@ -45,9 +44,9 @@ def compress(grid:list):
     changed = False
     new_grid = generateGrid()  
     
-    for i in range(4):
+    for i in range(size):
         pos = 0
-        for j in range(4):
+        for j in range(size):
             if grid[i][j] != "□":
                 new_grid[i][pos] = grid[i][j]
                 if j != pos:
@@ -60,8 +59,8 @@ def merge(grid:list):
      
     changed = False
      
-    for i in range(4):
-        for j in range(3):
+    for i in range(size):
+        for j in range(size-1):
             if(grid[i][j] == grid[i][j + 1] and grid[i][j] != "□"):
 
                 grid[i][j] = str(int(grid[i][j]) * 2)
@@ -75,10 +74,10 @@ def reverse(grid:list):
     
     new_grid =[]
     
-    for i in range(4):
+    for i in range(size):
         new_grid.append([])
         
-        for j in range(4):
+        for j in range(size):
             new_grid[i].append(grid[i][3 - j])
             
     return new_grid
@@ -86,10 +85,10 @@ def reverse(grid:list):
 def transpose(grid:list):
 
     new_grid = []
-    for i in range(4):
+    for i in range(size):
         new_grid.append([])
 
-        for j in range(4):
+        for j in range(size):
             new_grid[i].append(grid[j][i])
             
     return new_grid
@@ -182,19 +181,19 @@ def printGrid(grid:list):
 
 def gameStateWin(grid: list) -> str:
     
-    for i in range(4):
-        for j in range(4):
+    for i in range(size):
+        for j in range(size):
             if grid[i][j] != "□":
                 if int(grid[i][j]) == 2048:
                     return 'Gagné !'
 
-    for i in range(4):
-        for j in range(4):
+    for i in range(size):
+        for j in range(size):
             if grid[i][j] == "□":
                 return 'Continuez à jouer !'
 
-    for i in range(3):
-        for j in range(3):
+    for i in range(size-1):
+        for j in range(size-1):
             if grid[i][j] != "□":
                 if int(grid[i][j]) == int(grid[i + 1][j]) or int(grid[i][j]) == int(grid[i][j + 1]):
                     return 'Continuez à jouer !'
@@ -204,6 +203,7 @@ def gameStateWin(grid: list) -> str:
 
 def jeu():
     
+        size = AskIntInRange("Choisissez une taile de grille NxN (avec N mini 4, max 1000):", 4, 1000)
         grid = generateGrid()
         emptySlots=checkEmptySlots(grid)
         init(grid,emptySlots) 
@@ -214,7 +214,7 @@ def jeu():
         while True:
             emptySlots=checkEmptySlots(grid)
             grid = move(grid)
-            
+            emptySlots=checkEmptySlots(grid)
             state = gameStateWin(grid)
             
             if gameStateWin(grid) == 'Continuez à jouer !':
