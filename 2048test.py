@@ -157,48 +157,52 @@ def jeu():
         init(grid, emptySlots)
         printGrid(grid)
 
+        valid_keys = {'q', 'd', 'z', 's'}
         while True:
             key = keyboard.read_event(suppress=True)
 
             if key.event_type == keyboard.KEY_DOWN:
-                if key.name == 'q':
-                    grid, _ = move_left_func(grid)
-                elif key.name == 'd':
-                    grid, _ = move_right_func(grid)
-                elif key.name == 'z':
-                    grid, _ = move_up_func(grid)
-                elif key.name == 's':
-                    grid, _ = move_down_func(grid)
+                 if key.name in valid_keys:
+                    if key.name == 'q':
+                        grid, _ = move_left_func(grid)
+                    elif key.name == 'd':
+                        grid, _ = move_right_func(grid)
+                    elif key.name == 'z':
+                        grid, _ = move_up_func(grid)
+                    elif key.name == 's':
+                        grid, _ = move_down_func(grid)
+                    else: print("Touche pas bon (z,q,s,d)")
+                    
 
-                emptySlots = checkEmptySlots(grid)
-                state = gameStateWin(grid)
+                    emptySlots = checkEmptySlots(grid)
+                    state = gameStateWin(grid)
 
-                if gameStateWin(grid) == 'Continuez à jouer !':
-                    if len(emptySlots) > 0:
-                        randomGen(grid, emptySlots)
+                    if gameStateWin(grid) == 'Continuez à jouer !':
+                        if len(emptySlots) > 0:
+                            randomGen(grid, emptySlots)
 
-                if gameStateWin(grid) == 'Perdu D:':
+                    if gameStateWin(grid) == 'Perdu D:':
+                        printGrid(grid)
+                        print("Vous avez perdu !")
+                        if not Retry():
+                            return
+                        else:
+                            grid = generateGrid()
+                            emptySlots = checkEmptySlots(grid)
+                            init(grid, emptySlots)
+                    
+                    if gameStateWin(grid) == 'Gagné !':
+                        printGrid(grid)
+                        print("Vous avez Gagné !! gg")
+                        if not Retry():
+                            return
+                        else:
+                            grid = generateGrid()
+                            emptySlots = checkEmptySlots(grid)
+                            init(grid, emptySlots)
+
                     printGrid(grid)
-                    print("Vous avez perdu !")
-                    if not Retry():
-                        return
-                    else:
-                        grid = generateGrid()
-                        emptySlots = checkEmptySlots(grid)
-                        init(grid, emptySlots)
-                
-                if gameStateWin(grid) == 'Gagné !':
-                    printGrid(grid)
-                    print("Vous avez Gagné !! gg")
-                    if not Retry():
-                        return
-                    else:
-                        grid = generateGrid()
-                        emptySlots = checkEmptySlots(grid)
-                        init(grid, emptySlots)
-
-                printGrid(grid)
-                print(state)
+                    print(state)
 
             
         
