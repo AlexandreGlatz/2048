@@ -265,7 +265,7 @@ def test():
     else:
         print("MOVE UP FAILURE")
     
-     #test fusion   
+    #test fusion   
     grid = \
         [
             ["□", "□", "□", "□" ],
@@ -300,55 +300,57 @@ def jeu()->None:
         
         spaceGrid = alignGrid(grid)
         printGrid(grid,spaceGrid)
-
+        valid_keys={"z", "s", "q", "d"}
+        
         while True:
             key = keyboard.read_event(suppress=True)
 
             if key.event_type == keyboard.KEY_DOWN:
-                if key.name == 'q':
-                    grid, _ = move_left(grid)
-                elif key.name == 'd':
-                    grid, _ = move_right(grid)
-                elif key.name == 'z':
-                    grid, _ = move_up(grid)
-                elif key.name == 's':
-                    grid, _ = move_down(grid)
-            
-            emptySlots=checkEmptySlots(grid)
-            spaceGrid = alignGrid(grid)
-            state = gameStateWin(grid)
-            
-            if gameStateWin(grid) == 'Continuez à jouer !':
+                if key.name in valid_keys:
+                    if key.name == 'q':
+                        grid, _ = move_left(grid)
+                    elif key.name == 'd':
+                        grid, _ = move_right(grid)
+                    elif key.name == 'z':
+                        grid, _ = move_up(grid)
+                    elif key.name == 's':
+                        grid, _ = move_down(grid)
+                    else: print("Ce n'est pas une touche valable ")
+                emptySlots=checkEmptySlots(grid)
+                spaceGrid = alignGrid(grid)
+                state = gameStateWin(grid)
                 
-                if len(emptySlots) > 0:
-                    randomGen(grid,emptySlots)
+                if gameStateWin(grid) == 'Continuez à jouer !':
+                    
+                    if len(emptySlots) > 0:
+                        randomGen(grid,emptySlots)
 
-            if gameStateWin(grid) == 'Perdu D:':
+                if gameStateWin(grid) == 'Perdu D:':
+                    printGrid(grid,spaceGrid)
+                    print("Vous avez perdu !")
+                    if not Retry():
+                        return
+                    else:
+                        grid = generateGrid()
+                        emptySlots=checkEmptySlots(grid)
+                        init(grid,emptySlots) 
+                
+                if gameStateWin(grid) == 'Gagné !':
+                    printGrid(grid,spaceGrid)
+                    print("Vous avez Gagné !! gg")
+                    if not Retry():
+                        return
+                    else:
+                        grid = generateGrid()
+                        emptySlots=checkEmptySlots(grid)
+                        init(grid,emptySlots) 
+
                 printGrid(grid,spaceGrid)
-                print("Vous avez perdu !")
-                if not Retry():
-                    return
-                else:
-                    grid = generateGrid()
-                    emptySlots=checkEmptySlots(grid)
-                    init(grid,emptySlots) 
-            
-            if gameStateWin(grid) == 'Gagné !':
-                printGrid(grid,spaceGrid)
-                print("Vous avez Gagné !! gg")
-                if not Retry():
-                    return
-                else:
-                    grid = generateGrid()
-                    emptySlots=checkEmptySlots(grid)
-                    init(grid,emptySlots) 
+                print(state)
 
-            printGrid(grid,spaceGrid)
-            print(state)
-
+                
             
-        
-        
-        
+            
+            
 
 test()
