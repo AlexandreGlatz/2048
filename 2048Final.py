@@ -5,8 +5,6 @@ import keyboard
 
 SIZE: int = 4
 
-
-
 def generateGrid() -> list:
     grid: list = []
     for i in range(SIZE):
@@ -269,17 +267,17 @@ def test():
     grid = \
         [
             ["□", "□", "□", "□" ],
-            ["2", "□", "□", "□" ],
-            ["2", "4", "4", "2" ],
-            ["2", "2", "4", "2" ],
+            ["□", "□", "□", "□" ],
+            ["16", "8", "4", "2" ],
+            ["16", "8", "4", "2" ],
         ]
     
     expected_result = \
         [
             ["□", "□", "□", "□" ],
             ["□", "□", "□", "□" ],
-            ["2", "4", "□", "□" ],
-            ["4", "2", "8", "4" ],
+            ["□", "□", "□", "□" ],
+            ["32", "16", "8", "4" ],
         ]
         
     grid,flag = move_down(grid)
@@ -293,49 +291,49 @@ def test():
     grid = \
         [
             ["□", "□", "□", "□" ],
-            ["2", "□", "□", "□" ],
-            ["2", "4", "4", "2" ],
-            ["2", "2", "4", "2" ],
+            ["□", "□", "□", "□" ],
+            ["2", "8", "2", "4" ],
+            ["16", "2", "4", "2" ],
         ]
     
     expected_result = \
         [
             ["□", "□", "□", "□" ],
             ["□", "□", "□", "□" ],
-            ["2", "4", "□", "□" ],
-            ["4", "2", "8", "4" ],
+            ["2", "8", "2", "4" ],
+            ["16", "2", "4", "2" ],
         ]
         
     grid,flag = move_down(grid)
     
     if is_same_grid(grid, expected_result):
-        print("FUSION SUCCESS")
+        print("NON FUSION SUCCESS")
     else:
-        print("FUSION FAILURE")
+        print("NON FUSION FAILURE")
 
     #test fusion unique  
     grid = \
         [
-            ["□", "□", "□", "□" ],
-            ["2", "□", "□", "□" ],
-            ["2", "4", "4", "2" ],
-            ["2", "2", "4", "2" ],
+            ["□", "□", "2", "□" ],
+            ["2", "4", "2", "8" ],
+            ["2", "4", "2", "8" ],
+            ["2", "4", "2", "8" ],
         ]
     
     expected_result = \
         [
             ["□", "□", "□", "□" ],
             ["□", "□", "□", "□" ],
-            ["2", "4", "□", "□" ],
-            ["4", "2", "8", "4" ],
+            ["2", "4", "4", "8" ],
+            ["4", "8", "4", "16" ],
         ]
         
     grid,flag = move_down(grid)
     
     if is_same_grid(grid, expected_result):
-        print("FUSION SUCCESS")
+        print("UNIQUE FUSION SUCCESS")
     else:
-        print("FUSION FAILURE")
+        print("UNIQUE FUSION FAILURE")
 
 
 
