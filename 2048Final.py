@@ -288,6 +288,54 @@ def test():
         print("FUSION SUCCESS")
     else:
         print("FUSION FAILURE")
+    
+    #test non fusion   
+    grid = \
+        [
+            ["□", "□", "□", "□" ],
+            ["2", "□", "□", "□" ],
+            ["2", "4", "4", "2" ],
+            ["2", "2", "4", "2" ],
+        ]
+    
+    expected_result = \
+        [
+            ["□", "□", "□", "□" ],
+            ["□", "□", "□", "□" ],
+            ["2", "4", "□", "□" ],
+            ["4", "2", "8", "4" ],
+        ]
+        
+    grid,flag = move_down(grid)
+    
+    if is_same_grid(grid, expected_result):
+        print("FUSION SUCCESS")
+    else:
+        print("FUSION FAILURE")
+
+    #test fusion unique  
+    grid = \
+        [
+            ["□", "□", "□", "□" ],
+            ["2", "□", "□", "□" ],
+            ["2", "4", "4", "2" ],
+            ["2", "2", "4", "2" ],
+        ]
+    
+    expected_result = \
+        [
+            ["□", "□", "□", "□" ],
+            ["□", "□", "□", "□" ],
+            ["2", "4", "□", "□" ],
+            ["4", "2", "8", "4" ],
+        ]
+        
+    grid,flag = move_down(grid)
+    
+    if is_same_grid(grid, expected_result):
+        print("FUSION SUCCESS")
+    else:
+        print("FUSION FAILURE")
 
 
 
@@ -300,41 +348,33 @@ def jeu()->None:
         
         spaceGrid = alignGrid(grid)
         printGrid(grid,spaceGrid)
-<<<<<<< HEAD
         valid_keys={"z", "s", "q", "d"}
         
-=======
-        
-        validKeys ={'z', 'q', 's', 'd'}
 
->>>>>>> 50bc6ac7ddb2cecd87f17182c8f6de7ffcac2154
         while True:
             key = keyboard.read_event(suppress=True)
 
             if key.event_type == keyboard.KEY_DOWN:
-<<<<<<< HEAD
                 if key.name in valid_keys:
-=======
-                if key.name in validKeys:
->>>>>>> 50bc6ac7ddb2cecd87f17182c8f6de7ffcac2154
-                    if key.name == 'q':
-                        grid, _ = move_left(grid)
-                    elif key.name == 'd':
-                        grid, _ = move_right(grid)
-                    elif key.name == 'z':
-                        grid, _ = move_up(grid)
-                    elif key.name == 's':
-                        grid, _ = move_down(grid)
-<<<<<<< HEAD
-                    else: print("Ce n'est pas une touche valable ")
-                emptySlots=checkEmptySlots(grid)
-                spaceGrid = alignGrid(grid)
-                state = gameStateWin(grid)
-                
-                if gameStateWin(grid) == 'Continuez à jouer !':
+                    if key.name in valid_keys:
+                        if key.name == 'q':
+                            grid, _ = move_left(grid)
+                        elif key.name == 'd':
+                            grid, _ = move_right(grid)
+                        elif key.name == 'z':
+                            grid, _ = move_up(grid)
+                        elif key.name == 's':
+                            grid, _ = move_down(grid)
+                        else: print("Touche incorrect (z, s ,q ,d)")
                     
-                    if len(emptySlots) > 0:
-                        randomGen(grid,emptySlots)
+                        emptySlots=checkEmptySlots(grid)
+                        spaceGrid = alignGrid(grid)
+                        state = gameStateWin(grid)
+                        
+                        if gameStateWin(grid) == 'Continuez à jouer !':
+                            
+                            if len(emptySlots) > 0:
+                                randomGen(grid,emptySlots)
 
                 if gameStateWin(grid) == 'Perdu D:':
                     printGrid(grid,spaceGrid)
@@ -363,46 +403,5 @@ def jeu()->None:
             
             
             
-=======
-                    else: print("Touche incorrect (z, s ,q ,d)")
-                    
-                
-                    emptySlots=checkEmptySlots(grid)
-                    spaceGrid = alignGrid(grid)
-                    state = gameStateWin(grid)
-                    
-                    if gameStateWin(grid) == 'Continuez à jouer !':
-                        
-                        if len(emptySlots) > 0:
-                            randomGen(grid,emptySlots)
 
-                    if gameStateWin(grid) == 'Perdu D:':
-                        printGrid(grid,spaceGrid)
-                        print("Vous avez perdu !")
-                        if not Retry():
-                            return
-                        else:
-                            grid = generateGrid()
-                            emptySlots=checkEmptySlots(grid)
-                            init(grid,emptySlots) 
-                    
-                    if gameStateWin(grid) == 'Gagné !':
-                        printGrid(grid,spaceGrid)
-                        print("Vous avez Gagné !! gg")
-                        if not Retry():
-                            return
-                        else:
-                            grid = generateGrid()
-                            emptySlots=checkEmptySlots(grid)
-                            init(grid,emptySlots) 
-
-                    printGrid(grid,spaceGrid)
-                    print(state)
-
-                
-        
-        
-        
->>>>>>> 50bc6ac7ddb2cecd87f17182c8f6de7ffcac2154
-
-jeu()
+test()
