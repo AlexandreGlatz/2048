@@ -362,7 +362,6 @@ def jeu()->None:
                         grid, _ = move_up(grid)
                     elif key.name == 's':
                         grid, _ = move_down(grid)
-                    else: print("Touche incorrect (z, s ,q ,d)")
                 
                     emptySlots=checkEmptySlots(grid)
                     spaceGrid = alignGrid(grid)
