@@ -354,25 +354,24 @@ def jeu()->None:
 
             if key.event_type == keyboard.KEY_DOWN:
                 if key.name in valid_keys:
-                    if key.name in valid_keys:
-                        if key.name == 'q':
-                            grid, _ = move_left(grid)
-                        elif key.name == 'd':
-                            grid, _ = move_right(grid)
-                        elif key.name == 'z':
-                            grid, _ = move_up(grid)
-                        elif key.name == 's':
-                            grid, _ = move_down(grid)
-                        else: print("Touche incorrect (z, s ,q ,d)")
+                    if key.name == 'q':
+                        grid, _ = move_left(grid)
+                    elif key.name == 'd':
+                        grid, _ = move_right(grid)
+                    elif key.name == 'z':
+                        grid, _ = move_up(grid)
+                    elif key.name == 's':
+                        grid, _ = move_down(grid)
+                    else: print("Touche incorrect (z, s ,q ,d)")
+                
+                    emptySlots=checkEmptySlots(grid)
+                    spaceGrid = alignGrid(grid)
+                    state = gameStateWin(grid)
                     
-                        emptySlots=checkEmptySlots(grid)
-                        spaceGrid = alignGrid(grid)
-                        state = gameStateWin(grid)
+                    if gameStateWin(grid) == 'Continuez à jouer !':
                         
-                        if gameStateWin(grid) == 'Continuez à jouer !':
-                            
-                            if len(emptySlots) > 0:
-                                randomGen(grid,emptySlots)
+                        if len(emptySlots) > 0:
+                            randomGen(grid,emptySlots)
 
                 if gameStateWin(grid) == 'Perdu D:':
                     printGrid(grid,spaceGrid)
@@ -402,4 +401,4 @@ def jeu()->None:
             
             
 
-test()
+jeu()
